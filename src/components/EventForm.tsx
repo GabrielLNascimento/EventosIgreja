@@ -3,7 +3,7 @@
 import { useActionState, useRef, useState } from "react";
 import { createEventAction, type ActionState } from "@/app/actions/events";
 
-function resizeImage(file: File, maxSize = 1000, quality = 0.75): Promise<string> {
+function resizeImage(file: File, maxSize = 1000, quality = 0.7): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = () => reject(new Error("Falha ao ler o arquivo"));

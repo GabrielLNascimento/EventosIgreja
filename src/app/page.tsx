@@ -19,7 +19,7 @@ export default async function Home() {
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
       <header className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Eventos da Igreja</h1>
+          <h1 className="text-3xl font-bold text-white">Programação Igreja Aba Pomerode</h1>
           <p className="text-sm text-neutral-400">Confira o que está rolando</p>
         </div>
         <Link

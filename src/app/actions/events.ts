@@ -30,7 +30,12 @@ export async function createEventAction(
   }
 
   const input: EventoInput = { nome, horario, local, data, foto };
-  await createEvent(input);
+
+  try {
+    await createEvent(input);
+  } catch {
+    return { error: "Não foi possível salvar o evento. Tente uma foto menor." };
+  }
 
   revalidatePath("/");
   revalidatePath("/admin");
