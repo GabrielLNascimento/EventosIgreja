@@ -16,10 +16,10 @@ export async function getUpcomingEvents(): Promise<Evento[]> {
   requireDb();
   const hoje = hojeNoFuso();
   const rows = (await sql`
-    SELECT id, nome, horario, local, data, foto, criado_em
+    SELECT id, nome, horario, local, data, dia_semana as "diaSemana", foto, fixo, criado_em
     FROM events
-    WHERE data >= ${hoje}::date
-    ORDER BY data ASC, horario ASC
+    WHERE fixo = true OR data >= ${hoje}::date
+    ORDER BY fixo DESC, data ASC NULLS LAST, horario ASC
   `) as Evento[];
   return rows;
 }
@@ -27,9 +27,20 @@ export async function getUpcomingEvents(): Promise<Evento[]> {
 export async function getAllEvents(): Promise<Evento[]> {
   requireDb();
   const rows = (await sql`
-    SELECT id, nome, horario, local, data, foto, criado_em
+    SELECT id, nome, horario, local, data, dia_semana as "diaSemana", foto, fixo, criado_em
     FROM events
-    ORDER BY data DESC, horario ASC
+    ORDER BY fixo DESC, data ASC NULLS LAST, horario ASC
+  `) as Evento[];
+  return rows;
+}
+
+export async function getFixedEvents(): Promise<Evento[]> {
+  requireDb();
+  const rows = (await sql`
+    SELECT id, nome, horario, local, data, dia_semana as "diaSemana", foto, fixo, criado_em
+    FROM events
+    WHERE fixo = true
+    ORDER BY horario ASC
   `) as Evento[];
   return rows;
 }
@@ -37,11 +48,38 @@ export async function getAllEvents(): Promise<Evento[]> {
 export async function createEvent(input: EventoInput): Promise<Evento> {
   requireDb();
   const rows = (await sql`
-    INSERT INTO events (nome, horario, local, data, foto)
-    VALUES (${input.nome}, ${input.horario}, ${input.local}, ${input.data}, ${input.foto ?? null})
-    RETURNING id, nome, horario, local, data, foto, criado_em
+    INSERT INTO events (nome, horario, local, data, foto, fixo, dia_semana)
+    VALUES (${input.nome}, ${input.horario}, ${input.local}, ${input.data ?? null}, ${input.foto ?? null}, ${input.fixo ?? false}, ${input.diaSemana ?? null})
+    RETURNING id, nome, horario, local, data, dia_semana as "diaSemana", foto, fixo, criado_em
   `) as Evento[];
   return rows[0];
+}
+
+export async function getEventById(id: number): Promise<Evento | null> {
+  requireDb();
+  if (!id) return null;
+  const rows = (await sql`
+    SELECT id, nome, horario, local, data, dia_semana as "diaSemana", foto, fixo, criado_em
+    FROM events
+    WHERE id = ${id}
+  `) as Evento[];
+  return rows[0] ?? null;
+}
+
+export async function editEvent(id: number, input: EventoInput): Promise<void> {
+  requireDb();
+  await sql`
+    UPDATE events
+    SET nome = ${input.nome}, horario = ${input.horario}, local = ${input.local},
+        data = ${input.data ?? null}, foto = ${input.foto ?? null}, fixo = ${input.fixo ?? false},
+        dia_semana = ${input.diaSemana ?? null}
+    WHERE id = ${id}
+  `;
+}
+
+export async function toggleFixedEvent(id: number): Promise<void> {
+  requireDb();
+  await sql`UPDATE events SET fixo = NOT fixo WHERE id = ${id}`;
 }
 
 export async function deleteEvent(id: number): Promise<void> {
