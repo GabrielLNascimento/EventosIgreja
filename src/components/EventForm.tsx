@@ -69,6 +69,7 @@ export default function EventForm({ evento }: { evento?: Evento | null }) {
       setEhFixo(evento.fixo);
       setFotoExistente(evento.foto);
       setPreview(evento.foto);
+      if (fotoRef.current) fotoRef.current.value = evento.foto ?? "";
     }
   }, [evento]);
 
@@ -77,7 +78,7 @@ export default function EventForm({ evento }: { evento?: Evento | null }) {
     const file = e.target.files?.[0];
     if (!file) {
       setPreview(fotoExistente);
-      if (fotoRef.current) fotoRef.current.value = "";
+      if (fotoRef.current) fotoRef.current.value = fotoExistente ?? "";
       return;
     }
     try {
@@ -87,7 +88,7 @@ export default function EventForm({ evento }: { evento?: Evento | null }) {
     } catch (err) {
       setErroFoto(err instanceof Error ? err.message : "Erro ao processar imagem");
       setPreview(fotoExistente);
-      if (fotoRef.current) fotoRef.current.value = "";
+      if (fotoRef.current) fotoRef.current.value = fotoExistente ?? "";
     }
   }
 
