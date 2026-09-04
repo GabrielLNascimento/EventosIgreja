@@ -27,12 +27,12 @@ export default async function Home() {
           </h1>
           <p className="text-sm text-neutral-400">Confira o que está rolando</p>
         </div>
-        <Link
+        {/* <Link
           href={admin ? "/admin" : "/login"}
           className="self-start rounded-md border border-neutral-700 bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-200 transition hover:bg-neutral-800"
         >
           {admin ? "Painel administrativo" : "Acesso administrativo"}
-        </Link>
+        </Link> */}
       </header>
 
       <FixedEventsSection eventos={eventosFixos} />
