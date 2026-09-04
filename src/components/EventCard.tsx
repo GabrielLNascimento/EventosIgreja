@@ -5,13 +5,13 @@ import {
 import Link from "next/link";
 
 const DIAS_SEMANA_PT: Record<string, string> = {
-  Domingo: "Domingo",
-  "Segunda-feira": "Segunda-feira",
-  "Terça-feira": "Terça-feira",
-  "Quarta-feira": "Quarta-feira",
-  "Quinta-feira": "Quinta-feira",
-  "Sexta-feira": "Sexta-feira",
-  Sábado: "Sábado",
+  Domingo: "Todo Domingo",
+  "Segunda-feira": "Toda Segunda-feira",
+  "Terça-feira": "Toda Terça-feira",
+  "Quarta-feira": "Toda Quarta-feira",
+  "Quinta-feira": "Toda Quinta-feira",
+  "Sexta-feira": "Toda Sexta-feira",
+  Sábado: "Todo Sábado",
 };
 
 function formatarData(data: string | Date): {
